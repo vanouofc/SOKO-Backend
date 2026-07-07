@@ -1,0 +1,105 @@
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+*.db-shm
+*.db-wal
+*.sql
+*.dump
+*.mdb
+*.ldf
+dump.rdb
+*.accdb
+*.sdf
+*.db3
+*.pgdump
+*.sql.gz
+redis.conf
+my.cnf
+pg_hba.conf
+# Logs
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+# Coverage
+lib-cov/
+coverage/
+*.lcov
+.nyc_output/
+# Cache
+.npm/
+.eslintcache
+.stylelintcache
+.node_repl_history
+.yarn-integrity
+# Dependency directories
+node_modules/
+jspm_packages/
+web_modules/
+# TypeScript
+*.tsbuildinfo
+# Optional
+.env
+.env.test
+.env.production
+
+# gi-all mandatory safety rules
+*.env
+.envrc
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.key
+*.pem
+*.p12
+*.cert
+*.crt
+*.pfx
+*.p8
+*.jks
+*.keystore
+*.ovpn
+*.ppk
+*.mobileprovision
+AuthKey_*.p8
+id_rsa
+id_rsa.*
+id_dsa
+id_ecdsa
+id_ed25519
+.aws/
+.npmrc
+.netrc
+.pgpass
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfplan
+credentials.json
+auth.json
+jwt.txt
+secrets.yml
+secrets.yaml
+serviceAccountKey.json
+firebase-adminsdk*.json
+*-firebase-adminsdk-*.json
+GoogleService-Info.plist
+.htpasswd
+secrets.*
+*.kdbx
+.direnv/
+pnpm-debug.log*
+bun.lockb
+.DS_Store

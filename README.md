@@ -1,0 +1,1 @@
+# SOKO---Stock-Management-App---Backend.

@@ -1,0 +1,26 @@
+{
+  "name": "soko",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "TINGUEU NGUIFO Shivano",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "better-auth": "^1.6.23",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "helmet": "^8.2.0",
+    "mongoose": "^9.7.3",
+    "morgan": "^1.11.0",
+    "resend": "^6.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
