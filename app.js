@@ -22,7 +22,7 @@ if (!PORT) {
 
 const app = express();
 
-app.use(arcjectMiddleware);
+// app.use(arcjectMiddleware);
 
 app.use("/api/auth/", toNodeHandler(auth));
 

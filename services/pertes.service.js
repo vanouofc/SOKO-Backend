@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Perte from "../models/pertes.model.js";
+import Utilisateur from "../models/utilisateurs.model.js";
 import { getproduitService } from "./produits.service.js";
 import { ErreurMetier } from "../errors/ErreurMetier.js";
 import Stock from "../models/stocks.model.js";
@@ -45,9 +46,11 @@ export const creerPerteService = async (perteData) => {
         await perte.save({session});
 
         await session.commitTransaction();
-        session.endSession();te = new P
+        session.endSession();
 
-        return perte;
+        const perteReturned = await Perte.findById(perte._id).populate('boutique', 'nom').populate('produit', 'nom').populate('utilisateur', 'nom prenom');
+
+        return perteReturned;
 
     } catch (error) {
         await session.abortTransaction();
@@ -58,7 +61,7 @@ export const creerPerteService = async (perteData) => {
 
 export const getPertesService = async () => {
     try {
-        const pertes = await Perte.find().populate("produit", "nom").populate("utilisateur", "nom").populate("boutique", "nom");
+        const pertes = await Perte.find().populate('produit', 'nom').populate('utilisateur', 'nom prenom').populate('boutique', 'nom');
 
         if(!pertes || pertes.length === 0) {
             throw new ErreurMetier("Aucune perte trouvée", 404);
@@ -70,9 +73,9 @@ export const getPertesService = async () => {
     }
 };
 
-export const getPerteSevice = async (perteId) => {
+export const getPerteService = async (perteId) => {
     try {
-        const perte = await Perte.findOne(perteId).populate("produit", "nom").populate("utilisateur", "nom").populate("boutique", "nom");
+        const perte = await Perte.findById(perteId).populate("produit", "nom").populate("utilisateur", "nom").populate("boutique", "nom");
 
         if(!perte) {
             throw new ErreurMetier("Perte introuvable.", 404);
@@ -88,16 +91,17 @@ export const annulerPerteService = async (perteId) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-        const perte = await getPerteSevice(perteId);
+        const perte = await getPerteService(perteId);
 
         const existProduit = await getproduitService(perte.produit);
 
-        const stock = await Stock.findOne({produit: perte.produit, boutique: perte.boutique});
+        const stock = await Stock.findOne({produit: perte.produit, boutique: perte.boutique}).session(session);
         if(!stock) {
             throw new ErreurMetier("Stock introuvable.", 404);
         };
 
         stock.quantite += perte.quantite;
+        await stock.save({session});
 
         perte.isActive = false;
         perte.deletedAt = new Date();
@@ -105,25 +109,27 @@ export const annulerPerteService = async (perteId) => {
         await perte.save({session});
 
         await session.commitTransaction();
-        session.endSession();
+        await session.endSession();
 
-        return perte;
+        const perteReturned = await Perte.findById(perte._id).populate("produit", "nom").populate("utilisateur", "nom").populate("boutique", "nom");
+
+        return perteReturned;
     } catch (error) {
         await session.abortTransaction();
-        session.endSession();
+        await session.endSession();
         throw error;
     }
 };
 
 export const deletePerteService = async (perteId) => {
     try {
-        const perte = await getPerteSevice(perteId);
+        const perte = await getPerteService(perteId);
 
         const deletedPerte = await Perte.findByIdAndUpdate(
             perteId,
             {isActive: false, deletedAt: new Date()},
             {returnDocument: "after", runValidators: true}
-        ); 
+        ).populate("produit", "nom").populate("utilisateur", "nom").populate("boutique", "nom");
 
         return deletedPerte;
     } catch (error) {

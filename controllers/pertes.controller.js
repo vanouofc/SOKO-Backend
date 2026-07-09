@@ -1,4 +1,4 @@
-import { annulerPerteService, creerPerteService, deletePerteService, getPerteSevice, getPertesService } from "../services/pertes.service.js";
+import { annulerPerteService, creerPerteService, deletePerteService, getPerteService, getPertesService } from "../services/pertes.service.js";
 
 
 export const creerPerte = async (req, res, next) => {
@@ -46,6 +46,7 @@ export const getPertes = async (req, res, next) => {
       return res.status(200).json({
         success: true,
         message: "Perte(s) trouvée(s).",
+        total: pertes.length,
         data: pertes
       });
 
@@ -71,11 +72,11 @@ export const getPerte = async (req, res, next) => {
             });
         };
 
-        const perte = await getPerteSevice(id);
+        const perte = await getPerteService(id);
 
         return res.status(200).json({
           success: true,
-          message: "Perte trouvée.",
+          message: "Perte annulée.",
           data: perte,
         });
     } catch (error) {
