@@ -52,4 +52,6 @@ boutiqueSchema.pre("findOne", function () {
     this.where({ isActive: true });
 });
 
-export const Boutique = mongoose.model('Boutique', boutiqueSchema);
+const Boutique = mongoose.model('Boutique', boutiqueSchema);
+
+export default Boutique;

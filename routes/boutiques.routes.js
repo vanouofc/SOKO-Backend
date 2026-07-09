@@ -10,13 +10,94 @@ const boutiqueRouter = Router();
 // ==========================================
 // ROUTES PUBLIC / EMPLOYÉS CONNECTÉS
 // ==========================================
+
+/**
+ * @route POST /api/boutiques
+ */
 boutiqueRouter.get("/:id", authMiddleware, getBoutique);
+/*
+    #swagger.tags = ['Boutiques']
+    #swagger.summary = 'Créer une boutique'
+    #swagger.description = 'Permet à un administrateur de créer une nouvelle boutique.'
+
+    #swagger.security = [{
+        "bearerAuth": []
+    }]
+
+    #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema: {
+                    nom: "Boutique Centre",
+                    adresse: "Yaoundé Centre",
+                    contact: "+237699999999"
+                }
+            }
+        }
+    }
+
+    #swagger.responses[201] = {
+        description: 'Boutique créée avec succès'
+    }
+
+    #swagger.responses[400] = {
+        description: 'Données invalides'
+    }
+
+    #swagger.responses[401] = {
+        description: 'Non authentifié'
+    }
+
+    #swagger.responses[403] = {
+        description: 'Accès refusé'
+    }
+*/
 
 
-// ==========================================
-// ROUTES RÉSERVÉES AUX ADMINISTRATEURS
-// ==========================================
+/**
+ * @route POST /api/boutiques
+ */
 boutiqueRouter.post("/", authMiddleware, requireVerifiedEmail, requireAdmin, creerBoutique); 
+/*
+    #swagger.tags = ['Boutiques']
+    #swagger.summary = 'Créer une boutique'
+    #swagger.description = 'Permet à un administrateur de créer une nouvelle boutique.'
+
+    #swagger.security = [{
+        "bearerAuth": []
+    }]
+
+    #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema: {
+                    nom: "Boutique Centre",
+                    adresse: "Yaoundé Centre",
+                    contact: "+237699999999"
+                }
+            }
+        }
+    }
+
+    #swagger.responses[201] = {
+        description: 'Boutique créée avec succès'
+    }
+
+    #swagger.responses[400] = {
+        description: 'Données invalides'
+    }
+
+    #swagger.responses[401] = {
+        description: 'Non authentifié'
+    }
+
+    #swagger.responses[403] = {
+        description: 'Accès refusé'
+    }
+*/
+
 boutiqueRouter.get("/", authMiddleware, requireVerifiedEmail, requireAdmin, getBoutiques);
 boutiqueRouter.patch("/:id/restore", authMiddleware, requireVerifiedEmail, requireAdmin, restoreBoutique); 
 boutiqueRouter.patch("/:id/responsables", authMiddleware, requireVerifiedEmail, requireAdmin, ajouterResponsable);

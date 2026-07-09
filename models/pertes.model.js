@@ -12,6 +12,11 @@ const perteSchema = new mongoose.Schema({
         required: true,
         min: 1
     },
+    montantPerte: {
+        type: Number,
+        required: true,
+        min: 0
+    },
     boutique: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Boutique',
@@ -52,4 +57,6 @@ perteSchema.pre("findOne", function () {
 });
 
 
-export const Perte = mongoose.model('Perte', perteSchema);
+const Perte = mongoose.model('Perte', perteSchema);
+
+export default Perte;

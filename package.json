@@ -8,9 +8,12 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "swagger": "node swagger.js"
   },
   "dependencies": {
+    "@arcjet/inspect": "^1.8.0",
+    "@arcjet/node": "^1.8.0",
     "better-auth": "^1.6.23",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -18,9 +21,11 @@
     "helmet": "^8.2.0",
     "mongoose": "^9.7.3",
     "morgan": "^1.11.0",
-    "resend": "^6.16.0"
+    "resend": "^6.16.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "swagger-autogen": "^2.23.7"
   }
 }

@@ -8,6 +8,10 @@ import boutiqueRouter from "./routes/boutiques.routes.js";
 import produitRouter from "./routes/produits.routes.js";
 import stockRouter from "./routes/stock.routes.js";
 import venteRouter from "./routes/ventes.routes.js";
+import perteRouter from "./routes/pertes.routes.js";
+import swaggerUi from "swagger-ui-express";
+import arcjectMiddleware from "./middlewares/arcjet.middleware.js";
+import swaggerDocument from "./swagger-output.json" with {type: "json"};
 
 dotenv.config();
 
@@ -18,14 +22,19 @@ if (!PORT) {
 
 const app = express();
 
+app.use(arcjectMiddleware);
+
 app.use("/api/auth/", toNodeHandler(auth));
 
 app.use(express.json());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/api/boutiques", boutiqueRouter);
 app.use("/api/produits", produitRouter);
 app.use("/api/stocks", stockRouter);
 app.use("/api/ventes", venteRouter);
+app.use("/api/pertes", perteRouter);
 app.get("/", (req, res) => {
     res.send("Server started successfully");
 });

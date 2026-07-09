@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Boutique } from "../models/boutique.model.js";
+import Boutique from "../models/boutique.model.js";
 import { ErreurMetier } from "../errors/ErreurMetier.js";
 
 /**

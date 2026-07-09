@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Vente } from "../models/ventes.model.js";
+import Vente from "../models/ventes.model.js";
 import Stock from "../models/stocks.model.js";
 import { ErreurMetier } from "../errors/ErreurMetier.js";
 import { getproduitService } from "./produits.service.js";

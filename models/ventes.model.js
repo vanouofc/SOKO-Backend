@@ -60,4 +60,6 @@ venteSchema.pre("findOne", function () {
     this.where({ isActive: true});
 });
 
-export const Vente = mongoose.model('Vente', venteSchema);
+const Vente = mongoose.model('Vente', venteSchema);
+
+export default Vente;

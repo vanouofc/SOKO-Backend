@@ -1,4 +1,4 @@
-import { Boutique } from "../models/boutique.model.js";
+
 import { ajouterResponsableService, creerBoutiqueService, getBoutiquesService, getBoutiqueService, updateBoutiqueService, deleteBoutiqueService, restoreBoutiqueService, retirerResponsableService } from "../services/boutiques.service.js";
 
 export const creerBoutique = async (req, res, next) => {
