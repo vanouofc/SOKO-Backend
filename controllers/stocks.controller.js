@@ -140,13 +140,6 @@ export const restoreStock = async (req, res, next) => {
 
 export const updateStock = async (req, res, next) => {
     try {
-        const role = ["admin", "responsable"];
-        if(!role.includes(req.user.role)) {
-            return res.status(403).json({
-                success: false,
-                message: "Vous ne pouvez pas modifier ce stock."
-            });
-        };
 
         const {id} = req.params;
         if(!id) {
@@ -179,13 +172,6 @@ export const updateStock = async (req, res, next) => {
 
 export const approvisionnerStock = async (req, res, next) => {
     try {
-        const role = ["admin", "responsable"];
-        if(!role.includes(req.user.role)) {
-            return res.status(403).json({
-                success: false,
-                message: "Vous ne pouvez pas modifier ce stock."
-            });
-        };
 
         const {id} = req.params;
         if(!id) {
@@ -217,13 +203,6 @@ export const approvisionnerStock = async (req, res, next) => {
 
 export const removeQuantiteStock = async (req, res, next) => {
     try {
-        const role = ["admin", "responsable"];
-        if(!role.includes(req.user.role)) {
-            return res.status(403).json({
-                success: false,
-                message: "Vous ne pouvez pas modifier ce stock."
-            });
-        };
 
         const {id} = req.params;
         if(!id) {

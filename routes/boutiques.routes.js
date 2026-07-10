@@ -2,113 +2,71 @@ import { Router } from "express";
 import { ajouterResponsable, creerBoutique, deleteBoutique, getBoutique, getBoutiques, restoreBoutique, retirerResponsable, updateBoutique } from "../controllers/boutiques.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { requireVerifiedEmail } from "../middlewares/verifiedemail.middleware.js";
-import { requireAdmin } from "../middlewares/admin.middleware.js";
+import { requireRole } from "../middlewares/requireRole.middleware.js";
 import { requireResponsableOuAdmin } from "../middlewares/responsableouadmin.middleware.js";
 import { paginationMiddleware } from "../middlewares/pagination.middleware.js";
 
 const boutiqueRouter = Router();
 
+
 // ==========================================
-// ROUTES PUBLIC / EMPLOYÉS CONNECTÉS
+// ROUTES ACCESSIBLES À TOUT EMPLOYÉ CONNECTÉ
 // ==========================================
-
-/**
- * @route POST /api/boutiques
- */
-boutiqueRouter.get("/:id", authMiddleware, getBoutique);
-/*
-    #swagger.tags = ['Boutiques']
-    #swagger.summary = 'Créer une boutique'
-    #swagger.description = 'Permet à un administrateur de créer une nouvelle boutique.'
-
-    #swagger.security = [{
-        "bearerAuth": []
-    }]
-
-    #swagger.requestBody = {
-        required: true,
-        content: {
-            "application/json": {
-                schema: {
-                    nom: "Boutique Centre",
-                    adresse: "Yaoundé Centre",
-                    contact: "+237699999999"
-                }
-            }
-        }
-    }
-
-    #swagger.responses[201] = {
-        description: 'Boutique créée avec succès'
-    }
-
-    #swagger.responses[400] = {
-        description: 'Données invalides'
-    }
-
-    #swagger.responses[401] = {
-        description: 'Non authentifié'
-    }
-
-    #swagger.responses[403] = {
-        description: 'Accès refusé'
-    }
-*/
+boutiqueRouter.get("/:id",
+    /* #swagger.tags = ['Boutiques'] */
+    /* #swagger.summary = 'Obtenir une boutique par ID' */
+    authMiddleware, getBoutique
+);
 
 
-/**
- * @route POST /api/boutiques
- */
-boutiqueRouter.post("/", authMiddleware, requireVerifiedEmail, requireAdmin, creerBoutique); 
-/*
-    #swagger.tags = ['Boutiques']
-    #swagger.summary = 'Créer une boutique'
-    #swagger.description = 'Permet à un administrateur de créer une nouvelle boutique.'
-
-    #swagger.security = [{
-        "bearerAuth": []
-    }]
-
-    #swagger.requestBody = {
-        required: true,
-        content: {
-            "application/json": {
-                schema: {
-                    nom: "Boutique Centre",
-                    adresse: "Yaoundé Centre",
-                    contact: "+237699999999"
-                }
-            }
-        }
-    }
-
-    #swagger.responses[201] = {
-        description: 'Boutique créée avec succès'
-    }
-
-    #swagger.responses[400] = {
-        description: 'Données invalides'
-    }
-
-    #swagger.responses[401] = {
-        description: 'Non authentifié'
-    }
-
-    #swagger.responses[403] = {
-        description: 'Accès refusé'
-    }
-*/
-
-boutiqueRouter.get("/", authMiddleware, requireVerifiedEmail, requireAdmin, paginationMiddleware(), getBoutiques);
-boutiqueRouter.patch("/:id/restore", authMiddleware, requireVerifiedEmail, requireAdmin, restoreBoutique); 
-boutiqueRouter.patch("/:id/responsables", authMiddleware, requireVerifiedEmail, requireAdmin, ajouterResponsable);
-boutiqueRouter.delete("/:id/responsables/:utilisateurId", authMiddleware, requireVerifiedEmail, requireAdmin, retirerResponsable);
+// ==========================================
+// ROUTES RÉSERVÉES À L'ADMINISTRATEUR
+// ==========================================
+boutiqueRouter.post("/",
+    /* #swagger.tags = ['Boutiques'] */
+    /* #swagger.summary = 'Créer une boutique' */
+    /* #swagger.requestBody = { required: true, content: { "application/json": { schema: { $ref: "#/definitions/Boutique" } } } } */
+    /* #swagger.responses[201] = { description: 'Boutique créée avec succès' } */
+    /* #swagger.responses[400] = { description: 'Données invalides' } */
+    /* #swagger.responses[401] = { description: 'Non authentifié' } */
+    /* #swagger.responses[403] = { description: 'Accès refusé' } */
+    authMiddleware, requireVerifiedEmail, requireRole("admin"), creerBoutique
+);
+boutiqueRouter.get("/",
+    /* #swagger.tags = ['Boutiques'] */
+    /* #swagger.summary = 'Lister toutes les boutiques' */
+    authMiddleware, requireVerifiedEmail, requireRole("admin"), paginationMiddleware(), getBoutiques
+);
+boutiqueRouter.patch("/:id/restore",
+    /* #swagger.tags = ['Boutiques'] */
+    /* #swagger.summary = 'Restaurer une boutique supprimée' */
+    authMiddleware, requireVerifiedEmail, requireRole("admin"), restoreBoutique
+);
+boutiqueRouter.patch("/:id/responsables",
+    /* #swagger.tags = ['Boutiques'] */
+    /* #swagger.summary = 'Ajouter un responsable à une boutique' */
+    authMiddleware, requireVerifiedEmail, requireRole("admin"), ajouterResponsable
+);
+boutiqueRouter.delete("/:id/responsables/:utilisateurId",
+    /* #swagger.tags = ['Boutiques'] */
+    /* #swagger.summary = 'Retirer un responsable de boutique' */
+    authMiddleware, requireVerifiedEmail, requireRole("admin"), retirerResponsable
+);
 
 
 // ==========================================
 // ROUTES ACCESSIBLES AU RESPONSABLE DE LA BOUTIQUE (OU ADMIN)
 // ==========================================
-boutiqueRouter.patch("/:id", authMiddleware, requireVerifiedEmail, requireResponsableOuAdmin, updateBoutique); 
-boutiqueRouter.delete("/:id", authMiddleware, requireVerifiedEmail, requireResponsableOuAdmin, deleteBoutique); 
+boutiqueRouter.patch("/:id",
+    /* #swagger.tags = ['Boutiques'] */
+    /* #swagger.summary = 'Mettre à jour une boutique' */
+    authMiddleware, requireVerifiedEmail, requireResponsableOuAdmin, updateBoutique
+);
+boutiqueRouter.delete("/:id",
+    /* #swagger.tags = ['Boutiques'] */
+    /* #swagger.summary = 'Supprimer une boutique (soft delete)' */
+    authMiddleware, requireVerifiedEmail, requireResponsableOuAdmin, deleteBoutique
+);
+
 
 export default boutiqueRouter;

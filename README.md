@@ -103,10 +103,11 @@ SOKO-Backend
 ├── services/
 │
 ├── middlewares/
-│   ├── admin.middleware.js
 │   ├── auth.middleware.js
 │   ├── error.middleware.js
 │   ├── pagination.middleware.js
+│   ├── requireRole.middleware.js
+│   ├── responsableouadmin.middleware.js
 │   └── verifiedemail.middleware.js
 │
 ├── models/
@@ -303,16 +304,18 @@ GET /api/stocks?page=3&limit=50
 
 ## Documentation Swagger
 
-Une documentation Swagger est disponible après le démarrage du serveur.
+Une documentation Swagger interactive est disponible après le démarrage du serveur.
 
 ```text
 http://localhost:3000/api-docs
 ```
 
+![Swagger UI](screenshots/swagger-ui.png)
+
 Swagger permet :
 
-* Visualiser les endpoints
-* Tester les requêtes
+* Visualiser les endpoints par catégorie (Boutiques, Produits, Stocks, Ventes, Pertes)
+* Tester les requêtes directement depuis le navigateur
 * Consulter les schémas de données
 * Vérifier les réponses attendues
 

@@ -35,12 +35,6 @@ export const createProduit = async (req, res, next) => {
 
 export const getProduits = async (req, res, next) => {
     try {
-        if (req.user.role !== "admin") {
-            return res.status(403).json({
-                succes: false,
-                message: "Non authorisé."
-            });
-        };
 
         const {produits, total} = await getProduitsService(req.pagination);
         const response = buildPaginatedResponse(produits, total, req.pagination);
@@ -88,13 +82,6 @@ export const getProduit = async (req, res, next) => {
 
 export const updateProduit = async (req, res, next) => {
     try {
-        const role = ["admin", "responsable"];
-        if(!role.includes(req.user.role)) {
-            return res.status(401).json({
-                success: false,
-                message: "Non authorisé."
-            });
-        };
 
         const {id} = req.params;
         if(!id) {
@@ -127,12 +114,6 @@ export const updateProduit = async (req, res, next) => {
 
 export const deleteProduit = async (req,res, next) => {
     try {
-        if(req.user.role !== "responsable" && req.user.role !== "admin") {
-            return res.status(403).json({
-                success: false,
-                message: "Non authorisé."
-            });
-        };
 
         const {id} = req.params;
         if(!id) {
