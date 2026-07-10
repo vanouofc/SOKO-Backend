@@ -1,4 +1,5 @@
 import { annulerPerteService, creerPerteService, deletePerteService, getPerteService, getPertesService } from "../services/pertes.service.js";
+import { buildPaginatedResponse } from "../utils/pagination.util.js";
 
 
 export const creerPerte = async (req, res, next) => {
@@ -41,13 +42,13 @@ export const getPertes = async (req, res, next) => {
         });
       };
 
-      const pertes = await getPertesService();
+      const {pertes, total} = await getPertesService(req.pagination);
+      const response = buildPaginatedResponse(pertes, total, req.pagination);
 
       return res.status(200).json({
         success: true,
         message: "Perte(s) trouvée(s).",
-        total: pertes.length,
-        data: pertes
+        ...response
       });
 
     } catch (error) {

@@ -1,4 +1,5 @@
 import { annulerVenteService, creerVenteService, deleteVenteService, getVenteService, getVentesService } from "../services/ventes.service.js";
+import { buildPaginatedResponse } from "../utils/pagination.util.js";
 
 
 export const creerVente = async (req, res, next) => {
@@ -56,12 +57,13 @@ export const getVentes = async (req, res, next) => {
             });
         };
 
-        const ventes = await getVentesService();
+        const {ventes, total} = await getVentesService(req.pagination);
+        const response = buildPaginatedResponse(ventes, total, req.pagination);
 
         return res.status(200).json({
             success: true,
             message: "Ventes retournées.",
-            data: ventes
+            ...response
         });
     } catch (error) {
         next(error);

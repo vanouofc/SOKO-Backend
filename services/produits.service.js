@@ -39,12 +39,15 @@ export const creerProduitService = async (produitdata) => {
 
 export const getProduitsService = async () => {
     try {
-        const produits = await Produit.find().sort({createdAt: -1});
-        if (!produits || produits.length === 0 ) {
+        const [produits, total] = await Promise.all([
+            Produit.find().sort({createdAt: -1}),
+            Produit.countDocuments({ isActive: true })
+        ]);
+        if (total === 0 ) {
             throw new ErreurMetier("Aucun produit n'a été trouvé.", 404);
         };
 
-        return produits;
+        return {produits, total};
 
     } catch (error) {
         throw error;

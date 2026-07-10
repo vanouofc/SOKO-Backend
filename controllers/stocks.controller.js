@@ -1,4 +1,5 @@
 import { approvisionnerStockService, creerStockService, deleteStockService, getStockService, getStocksService, removeQuantiteStockService, restoreStockService, updateStockService } from "../services/stocks.service.js";
+import { buildPaginatedResponse } from "../utils/pagination.util.js";
 
 
 export const creerStock = async (req, res, next) => {
@@ -34,12 +35,13 @@ export const getStocks = async (req, res, next) => {
             });
         };
 
-        const stocks = await getStocksService();
+        const {stocks, total} = await getStocksService(req.pagination);
+        const response = buildPaginatedResponse(stocks, total, req.pagination);
 
         return res.status(200).json({
             success: true,
             message: `Stock(s) retourné(s).`,
-            data: stocks
+            ...response
         });
     } catch (error) {
         next(error)

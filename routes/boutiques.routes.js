@@ -4,6 +4,7 @@ import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { requireVerifiedEmail } from "../middlewares/verifiedemail.middleware.js";
 import { requireAdmin } from "../middlewares/admin.middleware.js";
 import { requireResponsableOuAdmin } from "../middlewares/responsableouadmin.middleware.js";
+import { paginationMiddleware } from "../middlewares/pagination.middleware.js";
 
 const boutiqueRouter = Router();
 
@@ -98,7 +99,7 @@ boutiqueRouter.post("/", authMiddleware, requireVerifiedEmail, requireAdmin, cre
     }
 */
 
-boutiqueRouter.get("/", authMiddleware, requireVerifiedEmail, requireAdmin, getBoutiques);
+boutiqueRouter.get("/", authMiddleware, requireVerifiedEmail, requireAdmin, paginationMiddleware(), getBoutiques);
 boutiqueRouter.patch("/:id/restore", authMiddleware, requireVerifiedEmail, requireAdmin, restoreBoutique); 
 boutiqueRouter.patch("/:id/responsables", authMiddleware, requireVerifiedEmail, requireAdmin, ajouterResponsable);
 boutiqueRouter.delete("/:id/responsables/:utilisateurId", authMiddleware, requireVerifiedEmail, requireAdmin, retirerResponsable);

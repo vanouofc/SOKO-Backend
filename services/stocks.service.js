@@ -27,13 +27,16 @@ export const creerStockService = async (stockData) => {
 
 export const getStocksService = async () => {
     try {
-        const stocks = await Stock.find().populate('produit', 'nom').populate('boutique', 'nom');
+        const [stocks, total] = await Promise.all([
+            Stock.find().populate('produit', 'nom').populate('boutique', 'nom'),
+            Stock.countDocuments({isActive: true})
+        ]);
 
-        if(!stocks || stocks.length ===0) {
+        if(total ===0) {
             throw new ErreurMetier("Aucun stock disponible.", 404);
         };
 
-        return stocks;
+        return {stocks, total};
 
     } catch (error) {
         throw error;

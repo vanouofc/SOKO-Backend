@@ -1,4 +1,5 @@
 import { creerProduitService, deleteProduitService, getproduitService, getProduitsService, updateProduitService } from "../services/produits.service.js";
+import { buildPaginatedResponse } from "../utils/pagination.util.js";
 
 
 export const createProduit = async (req, res, next) => {
@@ -41,12 +42,13 @@ export const getProduits = async (req, res, next) => {
             });
         };
 
-        const produits = await getProduitsService();
+        const {produits, total} = await getProduitsService(req.pagination);
+        const response = buildPaginatedResponse(produits, total, req.pagination);
         
         return res.status(200).json({
             success: true,
             message: "Produit(s) retourné(s).",
-            data: produits,
+            ...response
         });
 
     } catch (error) {

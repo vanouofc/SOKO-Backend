@@ -1,5 +1,6 @@
 
 import { ajouterResponsableService, creerBoutiqueService, getBoutiquesService, getBoutiqueService, updateBoutiqueService, deleteBoutiqueService, restoreBoutiqueService, retirerResponsableService } from "../services/boutiques.service.js";
+import { buildPaginatedResponse } from "../utils/pagination.util.js";
 
 export const creerBoutique = async (req, res, next) => {
     try {
@@ -43,12 +44,13 @@ export const creerBoutique = async (req, res, next) => {
 
 export const getBoutiques = async (req, res, next) => {
     try {
-        const boutiques = await getBoutiquesService();
+        const {boutiques, total} = await getBoutiquesService(req.pagination);
+        const response = buildPaginatedResponse(boutiques, total, req.pagination)
 
         return res.status(200).json({
             success: true,
             message: "Liste des boutiques récupérée avec succès.",
-            data: boutiques
+            ...response
         });
 
     } catch (error) {
