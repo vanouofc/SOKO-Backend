@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { ajouterResponsable, creerBoutique, deleteBoutique, getBoutique, getBoutiques, restoreBoutique, retirerResponsable, updateBoutique } from "../controllers/boutiques.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
-import { requireVerifiedEmail } from "../middlewares/verifiedemail.middleware.js";
 import { requireRole } from "../middlewares/requireRole.middleware.js";
 import { requireResponsableOuAdmin } from "../middlewares/responsableouadmin.middleware.js";
 import { paginationMiddleware } from "../middlewares/pagination.middleware.js";
@@ -30,27 +29,27 @@ boutiqueRouter.post("/",
     /* #swagger.responses[400] = { description: 'Données invalides' } */
     /* #swagger.responses[401] = { description: 'Non authentifié' } */
     /* #swagger.responses[403] = { description: 'Accès refusé' } */
-    authMiddleware, requireVerifiedEmail, requireRole("admin"), creerBoutique
+    authMiddleware, requireRole("admin"), creerBoutique
 );
 boutiqueRouter.get("/",
     /* #swagger.tags = ['Boutiques'] */
     /* #swagger.summary = 'Lister toutes les boutiques' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin"), paginationMiddleware(), getBoutiques
+    authMiddleware, requireRole("admin"), paginationMiddleware(), getBoutiques
 );
 boutiqueRouter.patch("/:id/restore",
     /* #swagger.tags = ['Boutiques'] */
     /* #swagger.summary = 'Restaurer une boutique supprimée' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin"), restoreBoutique
+    authMiddleware, requireRole("admin"), restoreBoutique
 );
 boutiqueRouter.patch("/:id/responsables",
     /* #swagger.tags = ['Boutiques'] */
     /* #swagger.summary = 'Ajouter un responsable à une boutique' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin"), ajouterResponsable
+    authMiddleware, requireRole("admin"), ajouterResponsable
 );
 boutiqueRouter.delete("/:id/responsables/:utilisateurId",
     /* #swagger.tags = ['Boutiques'] */
     /* #swagger.summary = 'Retirer un responsable de boutique' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin"), retirerResponsable
+    authMiddleware, requireRole("admin"), retirerResponsable
 );
 
 
@@ -60,12 +59,12 @@ boutiqueRouter.delete("/:id/responsables/:utilisateurId",
 boutiqueRouter.patch("/:id",
     /* #swagger.tags = ['Boutiques'] */
     /* #swagger.summary = 'Mettre à jour une boutique' */
-    authMiddleware, requireVerifiedEmail, requireResponsableOuAdmin, updateBoutique
+    authMiddleware, requireResponsableOuAdmin, updateBoutique
 );
 boutiqueRouter.delete("/:id",
     /* #swagger.tags = ['Boutiques'] */
     /* #swagger.summary = 'Supprimer une boutique (soft delete)' */
-    authMiddleware, requireVerifiedEmail, requireResponsableOuAdmin, deleteBoutique
+    authMiddleware, requireResponsableOuAdmin, deleteBoutique
 );
 
 

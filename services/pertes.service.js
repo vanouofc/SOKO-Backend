@@ -59,16 +59,12 @@ export const creerPerteService = async (perteData) => {
     }
 };
 
-export const getPertesService = async ({skip, limit}) => {
+export const getPertesService = async ({skip = 0, limit = 20} = {}) => {
     try {
         const [pertes, total] = await Promise.all([
             Perte.find().populate('produit', 'nom').populate('utilisateur', 'nom prenom').populate('boutique', 'nom').skip(skip).limit(limit), 
             Perte.countDocuments({ isActive: true })
         ]);
-
-        if(total === 0) {
-            throw new ErreurMetier("Aucune perte trouvée", 404);
-        };
 
         return {pertes, total};
     } catch (error) {

@@ -39,12 +39,12 @@ export const creerBoutiqueService = async (donneesBoutique) => {
 /**
  * Recuperer toutes les boutiques.
  */
-export const getBoutiquesService = async () => {
+export const getBoutiquesService = async ({ isActive = true } = {}) => {
     try {
 
         const [boutiques, total] = await Promise.all([
-            Boutique.find(),
-            Boutique.countDocuments({isActive: true})
+            Boutique.find({ isActive }),
+            Boutique.countDocuments({ isActive })
         ]);
         if (total === 0) {
             throw new ErreurMetier("Aucune boutique n'a été trouvée.", 404);

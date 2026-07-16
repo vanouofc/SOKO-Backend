@@ -6,8 +6,13 @@ const ROLES_VALIDES = ["secretaire", "responsable"];
 // password et email sont EXCLUS volontairement : ils restent gérés par Better-Auth.
 const CHAMPS_PROFIL_AUTORISES = ["nom", "prenom", "phone", "photo"];
 
-export const listerUtilisateursService = async () => {
-    return await Utilisateur.find();
+export const listerUtilisateursService = async ({ skip = 0, limit = 20 } = {}) => {
+    const [utilisateurs, total] = await Promise.all([
+        Utilisateur.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+        Utilisateur.countDocuments({ isActive: true })
+    ]);
+
+    return { utilisateurs, total };
 };
 
 export const getUtilisateurService = async (id) => {

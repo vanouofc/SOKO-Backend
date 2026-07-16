@@ -25,11 +25,11 @@ export const creerStockService = async (stockData) => {
     }
 };
 
-export const getStocksService = async () => {
+export const getStocksService = async ({ isActive = true } = {}) => {
     try {
         const [stocks, total] = await Promise.all([
-            Stock.find().populate('produit', 'nom').populate('boutique', 'nom'),
-            Stock.countDocuments({isActive: true})
+            Stock.find({ isActive }).populate('produit', 'nom').populate('boutique', 'nom'),
+            Stock.countDocuments({ isActive })
         ]);
 
         if(total ===0) {

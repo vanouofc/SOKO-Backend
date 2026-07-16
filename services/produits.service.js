@@ -6,7 +6,7 @@ export const creerProduitService = async (produitdata) => {
   try {
     const { sku, nom, photo, boutique, description, type, prixachat, model } = produitdata;
 
-    if (!sku ||!nom ||!photo ||!boutique ||!description ||!type || !prixachat) {
+    if (!sku ||!nom ||!boutique ||!description ||!type || !prixachat) {
       throw new ErreurMetier(
         "Toutes les informations du produit ne sont pas renseigner.",
         400,
@@ -37,11 +37,11 @@ export const creerProduitService = async (produitdata) => {
   }
 };
 
-export const getProduitsService = async () => {
+export const getProduitsService = async ({ isActive = true } = {}) => {
     try {
         const [produits, total] = await Promise.all([
-            Produit.find().sort({createdAt: -1}),
-            Produit.countDocuments({ isActive: true })
+            Produit.find({ isActive }).sort({createdAt: -1}),
+            Produit.countDocuments({ isActive })
         ]);
         if (total === 0 ) {
             throw new ErreurMetier("Aucun produit n'a été trouvé.", 404);

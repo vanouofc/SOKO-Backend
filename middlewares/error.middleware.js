@@ -9,6 +9,20 @@ export const errorMiddleware = (err, req, res, next) => {
         });
     }
 
+    // 1bis. Erreurs Multer (upload de fichier) : trop volumineux, champ
+    // inattendu, etc. Sans ce cas elles tombaient dans le 500 générique
+    // ci-dessous et l'utilisateur ne savait jamais pourquoi son upload échouait.
+    if (err.name === "MulterError") {
+        const messages = {
+            LIMIT_FILE_SIZE: "Le fichier dépasse la taille maximale autorisée (5 Mo).",
+            LIMIT_UNEXPECTED_FILE: "Champ de fichier inattendu. Utilisez le champ \"photo\".",
+        };
+        return res.status(400).json({
+            success: false,
+            message: messages[err.code] || "Erreur lors du téléversement du fichier."
+        });
+    }
+
     // 2. Erreurs Mongoose courantes, pas encore migrées en ErreurMetier
     if (err.name === "ValidationError") {
         return res.status(400).json({

@@ -68,15 +68,19 @@ export const creerVenteService = async (donnéesVente) => {
     }
 };
 
-export const getVentesService = async () => {
+export const getVentesService = async ({ skip = 0, limit = 20 } = {}) => {
     try {
         const [ventes, total] = await Promise.all([
-            Vente.find().sort({createdAt: -1})
-        ]); 
-        if(total === 0) {
-            throw new ErreurMetier("Aucune vente enregistrée.", 404);
-        };
-        
+            Vente.find()
+                .sort({createdAt: -1})
+                .populate('boutique', 'nom')
+                .populate('utilisateur', 'nom prenom')
+                .populate('items.produit', 'nom')
+                .skip(skip)
+                .limit(limit),
+            Vente.countDocuments({ isActive: true })
+        ]);
+
         return {ventes, total};
     } catch (error) {
         throw error;

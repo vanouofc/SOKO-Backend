@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { annulerPerte, creerPerte, deletePerte, getPerte, getPertes } from "../controllers/pertes.controller.js";
-import { requireVerifiedEmail } from "../middlewares/verifiedemail.middleware.js";
 import { requireRole } from "../middlewares/requireRole.middleware.js";
 import { paginationMiddleware } from "../middlewares/pagination.middleware.js";
 
@@ -29,12 +28,12 @@ perteRouter.get("/:id",
 perteRouter.post("/",
     /* #swagger.tags = ['Pertes'] */
     /* #swagger.summary = 'Créer une perte' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin", "responsable"), creerPerte
+    authMiddleware, requireRole("admin", "responsable"), creerPerte
 );
 perteRouter.patch("/:id",
     /* #swagger.tags = ['Pertes'] */
     /* #swagger.summary = 'Annuler une perte' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin", "responsable"), annulerPerte
+    authMiddleware, requireRole("admin", "responsable"), annulerPerte
 );
 
 
@@ -44,7 +43,7 @@ perteRouter.patch("/:id",
 perteRouter.delete("/:id",
     /* #swagger.tags = ['Pertes'] */
     /* #swagger.summary = 'Supprimer une perte' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin"), deletePerte
+    authMiddleware, requireRole("admin"), deletePerte
 );
 
 

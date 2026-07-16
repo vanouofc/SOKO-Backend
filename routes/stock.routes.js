@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { approvisionnerStock, creerStock, deleteStock, getStock, getStocks, removeQuantiteStock, restoreStock, updateStock } from "../controllers/stocks.controller.js";
-import { requireVerifiedEmail } from "../middlewares/verifiedemail.middleware.js";
 import { requireRole } from "../middlewares/requireRole.middleware.js";
 import { paginationMiddleware } from "../middlewares/pagination.middleware.js";
 
@@ -29,32 +28,32 @@ stockRouter.get("/:id",
 stockRouter.post("/",
     /* #swagger.tags = ['Stocks'] */
     /* #swagger.summary = 'Créer une entrée de stock' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin", "responsable"), creerStock
+    authMiddleware, requireRole("admin", "responsable"), creerStock
 );
 stockRouter.patch("/:id",
     /* #swagger.tags = ['Stocks'] */
     /* #swagger.summary = 'Mettre à jour un stock' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin", "responsable"), updateStock
+    authMiddleware, requireRole("admin", "responsable"), updateStock
 );
 stockRouter.patch("/:id/add",
     /* #swagger.tags = ['Stocks'] */
     /* #swagger.summary = 'Approvisionner un stock' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin", "responsable"), approvisionnerStock
+    authMiddleware, requireRole("admin", "responsable"), approvisionnerStock
 );
 stockRouter.patch("/:id/remove",
     /* #swagger.tags = ['Stocks'] */
     /* #swagger.summary = 'Retirer une quantité de stock' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin", "responsable"), removeQuantiteStock
+    authMiddleware, requireRole("admin", "responsable"), removeQuantiteStock
 );
 stockRouter.delete("/:id",
     /* #swagger.tags = ['Stocks'] */
     /* #swagger.summary = 'Supprimer un stock' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin", "responsable"), deleteStock
+    authMiddleware, requireRole("admin", "responsable"), deleteStock
 );
 stockRouter.patch("/:id/restore",
     /* #swagger.tags = ['Stocks'] */
     /* #swagger.summary = 'Restaurer un stock supprimé' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin", "responsable"), restoreStock
+    authMiddleware, requireRole("admin", "responsable"), restoreStock
 );
 
 
