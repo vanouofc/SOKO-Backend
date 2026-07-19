@@ -10,10 +10,17 @@ dotenv.config();
 const client = new MongoClient(process.env.DB_URL);
 const db = client.db();
 
+// IMPORTANT : "*" désactive de fait la protection CSRF/origine de better-auth.
+// On réutilise la même liste que le CORS (CORS_ORIGINS), pour n'autoriser que
+// les origines réellement utilisées par le(s) front(s) Flutter/Web.
+const trustedOrigins = (process.env.CORS_ORIGINS || "http://localhost:61456")
+    .split(",")
+    .map((o) => o.trim());
+
 export const auth = betterAuth({
     database: mongodbAdapter(db),
 
-    trustedOrigins: ["*"], // <----- URL frontend
+    trustedOrigins,
     baseURL: process.env.BETTER_AUTH_URL,
 
     // ─── Email + Mot de passe ────────────────────────────────

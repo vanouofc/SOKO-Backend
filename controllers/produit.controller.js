@@ -14,14 +14,14 @@ export const createProduit = async (req, res, next) => {
         const { nom, photo, boutique, description, type, prixachat, model } = req.body;
         const sku = "Prod - " + Date.now();
 
-        if(!nom || !photo || !boutique || !description || !type) {
+        if(!nom || !boutique || !description || !type) {
             return res.status(400).json({
                 success: false,
                 message: "Informations du produit incomplète."
             });
         };
 
-        const nouveauProduit = await creerProduitService({sku, nom, photo, boutique, description, model, prixachat, type});
+        const nouveauProduit = await creerProduitService({sku, nom, photo: photo || null, boutique, description, model, prixachat, type});
 
         return res.status(201).json({
             success: true,
@@ -33,10 +33,38 @@ export const createProduit = async (req, res, next) => {
     }
 };
 
+// Reçoit un fichier image (multipart/form-data, champ "photo"), le stocke
+// sur le serveur et renvoie l'URL publique à utiliser pour créer/mettre à
+// jour un produit. Séparé de createProduit/updateProduit pour que le front
+// puisse uploader le fichier indépendamment (utile en offline-first : le
+// fichier est choisi hors-ligne, uploadé seulement une fois la synchro
+// possible).
+export const uploadProduitPhoto = async (req, res, next) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Aucun fichier image reçu."
+            });
+        };
+
+        const url = `/uploads/produits/${req.file.filename}`;
+
+        return res.status(201).json({
+            success: true,
+            message: "Photo téléversée avec succès.",
+            data: { url },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 export const getProduits = async (req, res, next) => {
     try {
 
-        const {produits, total} = await getProduitsService(req.pagination);
+        const isActive = req.query.statut !== "inactive";
+        const {produits, total} = await getProduitsService({ isActive });
         const response = buildPaginatedResponse(produits, total, req.pagination);
         
         return res.status(200).json({

@@ -35,7 +35,8 @@ export const getStocks = async (req, res, next) => {
             });
         };
 
-        const {stocks, total} = await getStocksService(req.pagination);
+        const isActive = req.query.statut !== "inactive";
+        const {stocks, total} = await getStocksService({ isActive });
         const response = buildPaginatedResponse(stocks, total, req.pagination);
 
         return res.status(200).json({

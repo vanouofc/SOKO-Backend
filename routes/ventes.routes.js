@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { annulerVente, creerVente, deleteVente, getVente, getVentes } from "../controllers/ventes.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
-import { requireVerifiedEmail } from "../middlewares/verifiedemail.middleware.js";
 import { requireRole } from "../middlewares/requireRole.middleware.js";
 import { paginationMiddleware } from "../middlewares/pagination.middleware.js";
 
@@ -29,12 +28,12 @@ venteRouter.get("/:id",
 venteRouter.post("/",
     /* #swagger.tags = ['Ventes'] */
     /* #swagger.summary = 'Créer une vente' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin", "responsable"), creerVente
+    authMiddleware, requireRole("admin", "responsable"), creerVente
 );
 venteRouter.patch("/:id",
     /* #swagger.tags = ['Ventes'] */
     /* #swagger.summary = 'Annuler une vente' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin", "responsable"), annulerVente
+    authMiddleware, requireRole("admin", "responsable"), annulerVente
 );
 
 
@@ -44,7 +43,7 @@ venteRouter.patch("/:id",
 venteRouter.delete("/:id",
     /* #swagger.tags = ['Ventes'] */
     /* #swagger.summary = 'Supprimer une vente' */
-    authMiddleware, requireVerifiedEmail, requireRole("admin"), deleteVente
+    authMiddleware, requireRole("admin"), deleteVente
 );
 
 
