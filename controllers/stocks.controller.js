@@ -30,7 +30,7 @@ export const getStocks = async (req, res, next) => {
     try {
         if (!req.user) {
             return res.status(401).json({
-                succes: false,
+                success: false,
                 message: "Non authentifié."
             });
         };
@@ -52,7 +52,7 @@ export const getStock = async (req, res, next) => {
     try {
         if (!req.user) {
             return res.status(401).json({
-                succes: false,
+                success: false,
                 message: "Non authentifié."
             });
         };
@@ -82,7 +82,7 @@ export const deleteStock = async (req, res, next) => {
     try {
         if (!req.user) {
             return res.status(401).json({
-                succes: false,
+                success: false,
                 message: "Non authentifié."
             });
         };
@@ -112,7 +112,7 @@ export const restoreStock = async (req, res, next) => {
     try {
         if (!req.user) {
             return res.status(401).json({
-                succes: false,
+                success: false,
                 message: "Non authentifié."
             });
         };

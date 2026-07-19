@@ -12,6 +12,7 @@ const doc = {
     { name: 'Stocks', description: 'Gestion des stocks et mouvements' },
     { name: 'Ventes', description: 'Gestion des ventes' },
     { name: 'Pertes', description: 'Gestion des pertes' },
+    { name: 'Utilisateurs', description: 'Gestion des utilisateurs et profils' },
   ],
   definitions: {
     Boutique: {
@@ -49,6 +50,14 @@ const doc = {
       quantite: 3,
       raison: "Endommagé",
       details: "Produit cassé lors du transport"
+    },
+    Utilisateur: {
+      nom: "Dupont",
+      prenom: "Jean",
+      email: "jean@example.com",
+      role: "secretaire",
+      phone: "+237699999999",
+      photo: "https://example.com/photo.jpg"
     }
   }
 };

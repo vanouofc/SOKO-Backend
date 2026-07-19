@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Boutique from "../models/boutique.model.js";
+import Utilisateur from "../models/utilisateurs.model.js";
 import { ErreurMetier } from "../errors/ErreurMetier.js";
 
 /**
@@ -10,7 +11,7 @@ export const creerBoutiqueService = async (donneesBoutique) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-        const { nom, adresse, contact, responsable } = donneesBoutique;
+        const { nom, adresse, contact, localisation, responsable } = donneesBoutique;
 
         const existBoutique = await Boutique.findOne({ nom: nom, adresse: adresse }).session(session);
         if (existBoutique) {
@@ -21,6 +22,7 @@ export const creerBoutiqueService = async (donneesBoutique) => {
             nom,
             adresse,
             contact,
+            localisation,
             responsables: [responsable]
         });
         await nouvelleBoutique.save({ session });
@@ -39,11 +41,10 @@ export const creerBoutiqueService = async (donneesBoutique) => {
 /**
  * Recuperer toutes les boutiques.
  */
-export const getBoutiquesService = async () => {
+export const getBoutiquesService = async ({skip, limit}) => {
     try {
-
         const [boutiques, total] = await Promise.all([
-            Boutique.find(),
+            Boutique.find().skip(skip).limit(limit),
             Boutique.countDocuments({isActive: true})
         ]);
         if (total === 0) {
@@ -161,11 +162,52 @@ export const retirerResponsableService = async (id, utilisateurId) => {
     if (!boutique) return null;
 
     if (boutique.responsables.length <= 1) {
-        throw new ErreurMetier("Impossible de retirer le dernier responsable de la boutique.", 206);
+        throw new ErreurMetier("Impossible de retirer le dernier responsable de la boutique.", 400);
     };
 
     boutique.responsables = boutique.responsables.filter(
         r => r.toString() !== utilisateurId.toString()
+    );
+    return await boutique.save();
+};
+
+export const ajouterSecretaireService = async (id, utilisateurId) => {
+    const boutique = await Boutique.findById(id);
+    if (!boutique) return null;
+
+    const utilisateur = await Utilisateur.findById(utilisateurId);
+    if (!utilisateur) {
+        throw new ErreurMetier("Utilisateur non trouvé.", 404);
+    };
+
+    if (utilisateur.role !== "secretaire") {
+        throw new ErreurMetier("L'utilisateur doit avoir le rôle de secrétaire.", 400);
+    };
+
+    const dejaSecretaire = boutique.secretaires.some(
+        s => s.toString() === utilisateurId.toString()
+    );
+    if (dejaSecretaire) {
+        throw new ErreurMetier("Cet utilisateur est déjà secrétaire de cette boutique.", 409);
+    };
+
+    boutique.secretaires.push(utilisateurId);
+    return await boutique.save();
+};
+
+export const retirerSecretaireService = async (id, utilisateurId) => {
+    const boutique = await Boutique.findById(id);
+    if (!boutique) return null;
+
+    const estSecretaire = boutique.secretaires.some(
+        s => s.toString() === utilisateurId.toString()
+    );
+    if (!estSecretaire) {
+        throw new ErreurMetier("Cet utilisateur n'est pas secrétaire de cette boutique.", 400);
+    };
+
+    boutique.secretaires = boutique.secretaires.filter(
+        s => s.toString() !== utilisateurId.toString()
     );
     return await boutique.save();
 };

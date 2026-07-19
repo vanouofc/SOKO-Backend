@@ -54,6 +54,8 @@ web_modules/
 .env.production
 
 # gi-all mandatory safety rules
+AGENTS.md
+*.pdf
 *.env
 .envrc
 .env.local

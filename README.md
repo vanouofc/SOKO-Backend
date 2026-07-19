@@ -1,6 +1,6 @@
 # SOKO - Stock Management App | Backend
 
-[![Node.js](https://img.shields.io/badge/Node.js-22.x-green)](https://nodejs.org)
+[![Node.js](https://img.shields.io/badge/Node.js-24.x-green)](https://nodejs.org)
 [![Express](https://img.shields.io/badge/Express-5.x-black)](https://expressjs.com)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-green)](https://mongodb.com)
 [![Better Auth](https://img.shields.io/badge/Auth-BetterAuth-blue)](https://www.better-auth.com)
@@ -30,6 +30,14 @@ SOKO Backend permet aux commerces et boutiques de gérer efficacement leurs prod
 * Protection contre les abus avec Arcjet
 * Sécurisation des en-têtes HTTP avec Helmet
 
+### Gestion des utilisateurs
+
+* Consultation de son profil
+* Modification de son profil (nom, prénom, téléphone, photo)
+* Administration des utilisateurs (rôles, activation/désactivation)
+* Pagination sur la liste des utilisateurs
+* Trois rôles : administrateur, responsable, secrétaire
+
 ### Gestion des boutiques
 
 * Création de boutiques
@@ -37,6 +45,10 @@ SOKO Backend permet aux commerces et boutiques de gérer efficacement leurs prod
 * Modification des informations
 * Suppression logique
 * Restauration des boutiques supprimées
+* Affectation de responsables (admin)
+* Retrait de responsables (admin)
+* Affectation de secrétaires (responsable ou admin)
+* Retrait de secrétaires (responsable ou admin)
 
 ### Gestion des produits
 
@@ -314,7 +326,7 @@ http://localhost:3000/api-docs
 
 Swagger permet :
 
-* Visualiser les endpoints par catégorie (Boutiques, Produits, Stocks, Ventes, Pertes)
+* Visualiser les endpoints par catégorie (Boutiques, Produits, Stocks, Ventes, Pertes, Utilisateurs)
 * Tester les requêtes directement depuis le navigateur
 * Consulter les schémas de données
 * Vérifier les réponses attendues
@@ -331,6 +343,10 @@ GET    /api/boutiques/:id
 POST   /api/boutiques
 PATCH  /api/boutiques/:id
 PATCH  /api/boutiques/:id/restore
+PATCH  /api/boutiques/:id/responsables
+DELETE /api/boutiques/:id/responsables/:utilisateurId
+PATCH  /api/boutiques/:id/secretaires
+DELETE /api/boutiques/:id/secretaires/:utilisateurId
 DELETE /api/boutiques/:id
 ```
 
@@ -386,6 +402,20 @@ PATCH  /api/pertes/:id
 DELETE /api/pertes/:id
 ```
 
+### Utilisateurs
+
+```http
+GET    /api/utilisateurs/me
+PATCH  /api/utilisateurs/me
+
+GET    /api/utilisateurs
+GET    /api/utilisateurs/:id
+
+PATCH  /api/utilisateurs/:id/role
+PATCH  /api/utilisateurs/:id/desactiver
+PATCH  /api/utilisateurs/:id/reactiver
+```
+
 ---
 
 ## Gestion des erreurs
@@ -415,6 +445,16 @@ Les mécanismes de sécurité implémentés incluent :
 * Helmet
 * Validation des données
 * Gestion centralisée des erreurs
+
+### Rôles et contrôle d'accès
+
+| Rôle | Description |
+| ---- | ----------- |
+| `admin` | Accès complet : gestion des boutiques, produits, stocks, ventes, pertes et utilisateurs |
+| `responsable` | Gestion de sa/ ses boutique(s) : produits, stocks, ventes, pertes, affectation de secrétaires |
+| `secretaire` | Consultation seule : listes et détails des produits, stocks, ventes, pertes |
+
+Les routes sont protégées par une chaîne de middlewares : `authMiddleware` → `requireVerifiedEmail` → `requireRole(...)` ou `requireResponsableOuAdmin`.
 
 ---
 

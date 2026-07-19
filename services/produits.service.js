@@ -37,10 +37,10 @@ export const creerProduitService = async (produitdata) => {
   }
 };
 
-export const getProduitsService = async () => {
+export const getProduitsService = async ({skip, limit}) => {
     try {
         const [produits, total] = await Promise.all([
-            Produit.find().sort({createdAt: -1}),
+            Produit.find().sort({createdAt: -1}).skip(skip).limit(limit),
             Produit.countDocuments({ isActive: true })
         ]);
         if (total === 0 ) {
@@ -72,7 +72,7 @@ export const updateProduitService = async (produitId, produitData) => {
     try {
         const produit = await getproduitService(produitId);
         
-        const updatedProduit = Produit.findByIdAndUpdate(
+        const updatedProduit = await Produit.findByIdAndUpdate(
             produitId, produitData, { returnDocument: "after", runValidators: true }
         );
 
@@ -87,7 +87,7 @@ export const deleteProduitService = async (produitId) => {
     try {
         const produit = await getproduitService(produitId);
 
-        const deletedProduit = Produit.findByIdAndUpdate(
+        const deletedProduit = await Produit.findByIdAndUpdate(
             produitId, {isActive: false, deletedAt: Date.now()},
             {runValidators: true, returnDocument: "after"}
         );

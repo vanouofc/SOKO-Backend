@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import Perte from "../models/pertes.model.js";
-import Utilisateur from "../models/utilisateurs.model.js";
 import { getproduitService } from "./produits.service.js";
 import { ErreurMetier } from "../errors/ErreurMetier.js";
 import Stock from "../models/stocks.model.js";
@@ -13,7 +12,7 @@ export const creerPerteService = async (perteData) => {
         let montantPerte = 0;
 
         if(quantite <= 0) {
-            throw new ErreurMetier("La quantite ne peut pas etre superieur à 0.", 400);
+            throw new ErreurMetier("La quantite doit etre superieur a 0.", 400);
         };
         
         const existProduit = await getproduitService(produit);
@@ -96,9 +95,9 @@ export const annulerPerteService = async (perteId) => {
     try {
         const perte = await getPerteService(perteId);
 
-        const existProduit = await getproduitService(perte.produit);
+        const existProduit = await getproduitService(perte.produit._id);
 
-        const stock = await Stock.findOne({produit: perte.produit, boutique: perte.boutique}).session(session);
+        const stock = await Stock.findOne({produit: perte.produit._id, boutique: perte.boutique._id}).session(session);
         if(!stock) {
             throw new ErreurMetier("Stock introuvable.", 404);
         };

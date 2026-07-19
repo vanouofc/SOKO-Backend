@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ajouterResponsable, creerBoutique, deleteBoutique, getBoutique, getBoutiques, restoreBoutique, retirerResponsable, updateBoutique } from "../controllers/boutiques.controller.js";
+import { ajouterResponsable, ajouterSecretaire, creerBoutique, deleteBoutique, getBoutique, getBoutiques, restoreBoutique, retirerResponsable, retirerSecretaire, updateBoutique } from "../controllers/boutiques.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { requireVerifiedEmail } from "../middlewares/verifiedemail.middleware.js";
 import { requireRole } from "../middlewares/requireRole.middleware.js";
@@ -66,6 +66,16 @@ boutiqueRouter.delete("/:id",
     /* #swagger.tags = ['Boutiques'] */
     /* #swagger.summary = 'Supprimer une boutique (soft delete)' */
     authMiddleware, requireVerifiedEmail, requireResponsableOuAdmin, deleteBoutique
+);
+boutiqueRouter.patch("/:id/secretaires",
+    /* #swagger.tags = ['Boutiques'] */
+    /* #swagger.summary = 'Ajouter un secrétaire à une boutique' */
+    authMiddleware, requireVerifiedEmail, requireResponsableOuAdmin, ajouterSecretaire
+);
+boutiqueRouter.delete("/:id/secretaires/:utilisateurId",
+    /* #swagger.tags = ['Boutiques'] */
+    /* #swagger.summary = 'Retirer un secrétaire de boutique' */
+    authMiddleware, requireVerifiedEmail, requireResponsableOuAdmin, retirerSecretaire
 );
 
 

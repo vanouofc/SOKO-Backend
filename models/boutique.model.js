@@ -4,8 +4,7 @@ const boutiqueSchema = new mongoose.Schema({
     nom: {
         type: String,
         required: [true, "Le nom de la boutique est requis."],
-        trim: true,
-        unique: true
+        trim: true
     },
     localisation: {
         type: { type: String, enum: ['Point'], default: 'Point' },
@@ -23,6 +22,10 @@ const boutiqueSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Utilisateur',
         required: true
+    }],
+    secretaires: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Utilisateur'
     }],
     contact: {
         type: String,

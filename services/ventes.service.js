@@ -68,10 +68,11 @@ export const creerVenteService = async (donnéesVente) => {
     }
 };
 
-export const getVentesService = async () => {
+export const getVentesService = async ({skip, limit}) => {
     try {
         const [ventes, total] = await Promise.all([
-            Vente.find().sort({createdAt: -1})
+            Vente.find().sort({createdAt: -1}).skip(skip).limit(limit),
+            Vente.countDocuments({ isActive: true })
         ]); 
         if(total === 0) {
             throw new ErreurMetier("Aucune vente enregistrée.", 404);

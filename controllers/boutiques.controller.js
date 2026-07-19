@@ -1,5 +1,5 @@
 
-import { ajouterResponsableService, creerBoutiqueService, getBoutiquesService, getBoutiqueService, updateBoutiqueService, deleteBoutiqueService, restoreBoutiqueService, retirerResponsableService } from "../services/boutiques.service.js";
+import { ajouterResponsableService, ajouterSecretaireService, creerBoutiqueService, getBoutiquesService, getBoutiqueService, updateBoutiqueService, deleteBoutiqueService, restoreBoutiqueService, retirerResponsableService, retirerSecretaireService } from "../services/boutiques.service.js";
 import { buildPaginatedResponse } from "../utils/pagination.util.js";
 
 export const creerBoutique = async (req, res, next) => {
@@ -239,6 +239,60 @@ export const retirerResponsable = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             message: "Responsable retiré avec succès.",
+            data: boutiqueMiseAJour
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const ajouterSecretaire = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { utilisateurId } = req.body;
+
+        if (!utilisateurId) {
+            return res.status(400).json({
+                success: false,
+                message: "L'identifiant de l'utilisateur à ajouter est requis."
+            });
+        }
+
+        const boutiqueMiseAJour = await ajouterSecretaireService(id, utilisateurId);
+
+        if (!boutiqueMiseAJour) {
+            return res.status(404).json({
+                success: false,
+                message: "Aucune boutique trouvée."
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Secrétaire ajouté avec succès.",
+            data: boutiqueMiseAJour
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const retirerSecretaire = async (req, res, next) => {
+    try {
+        const { id, utilisateurId } = req.params;
+
+        const boutiqueMiseAJour = await retirerSecretaireService(id, utilisateurId);
+
+        if (!boutiqueMiseAJour) {
+            return res.status(404).json({
+                success: false,
+                message: "Aucune boutique trouvée."
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Secrétaire retiré avec succès.",
             data: boutiqueMiseAJour
         });
     } catch (error) {

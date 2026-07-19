@@ -77,7 +77,7 @@ export const getPerte = async (req, res, next) => {
 
         return res.status(200).json({
           success: true,
-          message: "Perte annulée.",
+          message: "Perte récupérée.",
           data: perte,
         });
     } catch (error) {

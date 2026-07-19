@@ -9,6 +9,7 @@ import produitRouter from "./routes/produits.routes.js";
 import stockRouter from "./routes/stock.routes.js";
 import venteRouter from "./routes/ventes.routes.js";
 import perteRouter from "./routes/pertes.routes.js";
+import utilisateurRouter from "./routes/utilisateurs.routes.js";
 import swaggerUi from "swagger-ui-express";
 import arcjectMiddleware from "./middlewares/arcjet.middleware.js";
 import swaggerDocument from "./swagger-output.json" with {type: "json"};
@@ -35,6 +36,7 @@ app.use("/api/produits", produitRouter);
 app.use("/api/stocks", stockRouter);
 app.use("/api/ventes", venteRouter);
 app.use("/api/pertes", perteRouter);
+app.use("/api/utilisateurs", utilisateurRouter);
 app.get("/", (req, res) => {
     res.send("Server started successfully");
 });
